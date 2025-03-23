@@ -1,0 +1,49 @@
+{
+  "name": "keyword-clustering",
+  "version": "0.1.0",
+  "description": "A package for clustering keywords using OpenAI embeddings",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build",
+    "example:basic": "ts-node examples/basic-usage.ts",
+    "example:chat": "ts-node examples/chat-topics.ts",
+    "example:tasks": "ts-node examples/project-tasks.ts"
+  },
+  "keywords": [
+    "clustering",
+    "keywords",
+    "openai",
+    "embeddings",
+    "nlp",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/keyword-clustering.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/keyword-clustering/issues"
+  },
+  "homepage": "https://github.com/yourusername/keyword-clustering#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.11",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "openai": "^4.89.0"
+  }
+}
