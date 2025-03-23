@@ -1,6 +1,6 @@
 {
   "name": "clusterkw",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A package for clustering keywords using OpenAI embeddings",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
