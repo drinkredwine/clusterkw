@@ -27,7 +27,7 @@ program
   .option('-d, --distance <number>', 'Maximum distance threshold', '0.3')
   .option('-e, --embedding-model <model>', 'OpenAI embedding model', 'text-embedding-3-small')
   .option('-g, --gpt-model <model>', 'OpenAI completion model', 'gpt-4o-mini-2024-07-18')
-  .option('-a, --algorithm <algorithm>', 'Clustering algorithm (simple, kmeans, hierarchical)', 'simple')
+  .option('-a, --algorithm <algorithm>', 'Clustering algorithm (simple, kmeans, hierarchical, direct)', 'simple')
   .option('-k, --clusters <number>', 'Number of clusters for k-means algorithm', '5')
   .option('--max-iterations <number>', 'Maximum iterations for k-means algorithm', '100')
   .option('--linkage <method>', 'Linkage method for hierarchical clustering (single, complete, average)', 'average')

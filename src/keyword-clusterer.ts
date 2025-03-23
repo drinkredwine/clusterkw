@@ -3,6 +3,7 @@ import { Cluster, ClusteringAlgorithm, KeywordClustererOptions } from './types';
 import { simpleClustering } from './algorithms/simple-clustering';
 import { kmeansClustering } from './algorithms/kmeans-clustering';
 import { hierarchicalClustering } from './algorithms/hierarchical-clustering';
+import { directClustering } from './algorithms/direct-clustering';
 
 /**
  * KeywordClusterer class for clustering keywords using OpenAI embeddings
@@ -51,7 +52,16 @@ export class KeywordClusterer {
       return [];
     }
 
-    // Get embeddings for all keywords
+    // For direct clustering, we don't need embeddings
+    if (this.algorithm === 'direct') {
+      return await directClustering(keywords, this.openai, {
+        model: this.completionModel,
+        minClusterSize: this.minClusterSize,
+        maxClusters: this.k || 10
+      });
+    }
+
+    // For other algorithms, proceed with embeddings
     const embeddings = await this.getEmbeddings(keywords);
 
     // Calculate distances between all embeddings

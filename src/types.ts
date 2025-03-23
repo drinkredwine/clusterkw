@@ -1,7 +1,7 @@
 /**
  * Available clustering algorithms
  */
-export type ClusteringAlgorithm = 'simple' | 'kmeans' | 'hierarchical';
+export type ClusteringAlgorithm = 'simple' | 'kmeans' | 'hierarchical' | 'direct';
 
 /**
  * Linkage methods for hierarchical clustering

@@ -8,6 +8,11 @@ A Node.js package for clustering keywords using OpenAI embeddings. This package 
 - Calculate distances between keywords
 - Create clusters of semantically similar keywords
 - Automatically generate cluster names and descriptions using OpenAI API
+- Multiple clustering algorithms:
+  - **Simple**: Basic distance-based clustering
+  - **K-means**: Centroid-based clustering with configurable number of clusters
+  - **Hierarchical**: Agglomerative clustering with different linkage methods
+  - **Direct**: LLM-based clustering without embeddings (sends keywords directly to the model)
 
 ## Installation
 
@@ -100,6 +105,7 @@ clusterkw --file keywords.txt --min-cluster-size 3 --distance 0.25
 # Use different clustering algorithms
 clusterkw --file keywords.txt --algorithm kmeans --clusters 5
 clusterkw --file keywords.txt --algorithm hierarchical --linkage complete
+clusterkw --file keywords.txt --algorithm direct --gpt-model gpt-4o-mini-2024-07-18
 
 # Provide API key directly (alternatively, set OPENAI_API_KEY or OPENAI_KEY environment variable)
 clusterkw --file keywords.txt --api-key your-openai-api-key
@@ -117,7 +123,7 @@ clusterkw --file keywords.txt --api-key your-openai-api-key
 | `--distance` | `-d` | Maximum distance threshold | `0.3` |
 | `--embedding-model` | `-e` | OpenAI embedding model | `text-embedding-3-small` |
 | `--gpt-model` | `-g` | OpenAI completion model | `gpt-4o-mini-2024-07-18` |
-| `--algorithm` | `-a` | Clustering algorithm (simple, kmeans, hierarchical) | `simple` |
+| `--algorithm` | `-a` | Clustering algorithm (simple, kmeans, hierarchical, direct) | `simple` |
 | `--clusters` | `-k` | Number of clusters for k-means algorithm | `5` |
 | `--max-iterations` | | Maximum iterations for k-means algorithm | `100` |
 | `--linkage` | | Linkage method for hierarchical clustering | `average` |
