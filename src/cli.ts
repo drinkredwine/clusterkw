@@ -60,8 +60,12 @@ async function main() {
           dotenv.config({ override: true });
           apiKey = process.env.OPENAI_API_KEY;
         }
-      } catch (error) {
-        console.warn('Error checking for .env file:', error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.warn('Error checking for .env file:', error.message);
+        } else {
+          console.warn('Error checking for .env file');
+        }
       }
     }
     
