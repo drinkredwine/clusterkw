@@ -1,9 +1,12 @@
 {
-  "name": "keyword-clustering",
+  "name": "clusterkw",
   "version": "0.1.0",
   "description": "A package for clustering keywords using OpenAI embeddings",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "clusterkw": "dist/cli.js"
+  },
   "directories": {
     "example": "examples",
     "test": "test"
@@ -14,7 +17,12 @@
     "prepublishOnly": "npm run build",
     "example:basic": "ts-node examples/basic-usage.ts",
     "example:chat": "ts-node examples/chat-topics.ts",
-    "example:tasks": "ts-node examples/project-tasks.ts"
+    "example:tasks": "ts-node examples/project-tasks.ts",
+    "cli": "ts-node src/cli.ts",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "publish": "npm publish"
   },
   "keywords": [
     "clustering",
@@ -28,13 +36,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/keyword-clustering.git"
+    "url": "git+https://github.com/yourusername/clusterkw.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/keyword-clustering/issues"
+    "url": "https://github.com/yourusername/clusterkw/issues"
   },
-  "homepage": "https://github.com/yourusername/keyword-clustering#readme",
+  "homepage": "https://github.com/yourusername/clusterkw#readme",
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.11",
     "jest": "^29.7.0",
@@ -43,7 +52,10 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "commander": "^13.1.0",
+    "csv-parser": "^3.2.0",
     "dotenv": "^16.4.7",
+    "fs-extra": "^11.3.0",
     "openai": "^4.89.0"
   }
 }

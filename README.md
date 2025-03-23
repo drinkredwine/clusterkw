@@ -1,4 +1,4 @@
-# Keyword Clustering
+# ClusterKW
 
 A Node.js package for clustering keywords using OpenAI embeddings. This package can be used to cluster Google Ads keywords, AI chat topics, project tasks, or any other text-based items into semantically similar groups.
 
@@ -12,13 +12,13 @@ A Node.js package for clustering keywords using OpenAI embeddings. This package 
 ## Installation
 
 ```bash
-npm install keyword-clustering
+npm install clusterkw
 ```
 
 ## Usage
 
 ```typescript
-import { KeywordClusterer } from 'keyword-clustering';
+import { KeywordClusterer } from 'clusterkw';
 
 // Initialize with your OpenAI API key
 const clusterer = new KeywordClusterer({
@@ -72,6 +72,76 @@ The main class for clustering keywords.
 - `calculateDistances(embeddings: number[][]): number[][]`: Calculates the cosine distances between all embeddings.
 - `generateClusters(keywords: string[], distances: number[][]): Cluster[]`: Generates clusters based on the distances.
 - `nameAndDescribeClusters(clusters: Cluster[]): Promise<Cluster[]>`: Generates names and descriptions for the clusters.
+
+## Command Line Interface (CLI)
+
+The package includes a CLI tool for clustering keywords directly from the command line:
+
+```bash
+# Install globally
+npm install -g clusterkw
+
+# Basic usage with a file
+clusterkw --file keywords.txt
+
+# Using a CSV file with a specific column
+clusterkw --file keywords.csv --column keyword
+
+# Specify output file
+clusterkw --file keywords.txt --output clusters.json
+
+# Customize clustering parameters
+clusterkw --file keywords.txt --min-cluster-size 3 --distance 0.25
+
+# Provide API key directly (alternatively, set OPENAI_API_KEY environment variable)
+clusterkw --file keywords.txt --key your-openai-api-key
+```
+
+### CLI Options
+
+| Option | Alias | Description | Default |
+|--------|-------|-------------|---------|
+| `--file` | `-f` | Path to file containing keywords (supports txt, csv, json) | (required) |
+| `--column` | `-c` | Column name containing keywords (for CSV files) | `keyword` |
+| `--output` | `-o` | Output file path (supports json, csv) | (none) |
+| `--key` | `-k` | OpenAI API key (overrides OPENAI_API_KEY env variable) | (from env) |
+| `--min-cluster-size` | `-m` | Minimum cluster size | `2` |
+| `--distance` | `-d` | Maximum distance threshold | `0.3` |
+| `--embedding-model` | `-e` | OpenAI embedding model | `text-embedding-3-small` |
+| `--gpt-model` | `-g` | OpenAI completion model | `gpt-3.5-turbo` |
+| `--delimiter` | | CSV delimiter | `,` |
+| `--no-header` | | CSV file has no header row | (false) |
+
+## Version Management
+
+This package follows [Semantic Versioning](https://semver.org/) (SemVer):
+
+- **MAJOR**: Incompatible API changes
+- **MINOR**: Add functionality (backward-compatible)
+- **PATCH**: Bug fixes (backward-compatible)
+
+### Updating the Version
+
+You can update the version using npm scripts:
+
+```bash
+# Increment patch version (1.0.0 -> 1.0.1)
+npm run version:patch
+
+# Increment minor version (1.0.0 -> 1.1.0)
+npm run version:minor
+
+# Increment major version (1.0.0 -> 2.0.0)
+npm run version:major
+```
+
+### Automatic Publishing
+
+This package uses GitHub Actions to automatically publish to npm when:
+
+1. A new version is pushed to the main branch (package.json changes)
+2. A new GitHub Release is created
+3. The publish workflow is manually triggered
 
 ## License
 
