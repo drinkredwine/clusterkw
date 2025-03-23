@@ -31,6 +31,7 @@ program
   .option('-k, --clusters <number>', 'Number of clusters for k-means algorithm', '5')
   .option('--max-iterations <number>', 'Maximum iterations for k-means algorithm', '100')
   .option('--linkage <method>', 'Linkage method for hierarchical clustering (single, complete, average)', 'average')
+  .option('--context <description>', 'Context description to guide clustering (e.g., "AI chat topics")')
   .option('--delimiter <char>', 'CSV delimiter', ',')
   .option('--no-header', 'CSV file has no header row');
 
@@ -114,8 +115,13 @@ async function main() {
       algorithm: options.algorithm as any,
       k: parseInt(options.clusters, 10),
       maxIterations: parseInt(options.maxIterations, 10),
-      linkage: options.linkage as any
+      linkage: options.linkage as any,
+      context: options.context
     });
+    
+    if (options.context) {
+      console.log(`Using context: "${options.context}"`);
+    }
     
     console.log(`Using clustering algorithm: ${options.algorithm}`);
 

@@ -30,6 +30,8 @@ export interface KeywordClustererOptions {
   maxIterations?: number;
   /** Linkage method for hierarchical clustering */
   linkage?: HierarchicalLinkage;
+  /** Context description to guide clustering and naming (e.g., "AI chat topics", "Google Ads keywords") */
+  context?: string;
 }
 
 /**

@@ -20,6 +20,7 @@
     "example:tasks": "ts-node examples/project-tasks.ts",
     "example:algorithms": "ts-node examples/algorithm-comparison.ts",
     "example:direct": "ts-node examples/direct-clustering.ts",
+    "example:context": "ts-node examples/context-clustering.ts",
     "cli": "ts-node src/cli.ts",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",

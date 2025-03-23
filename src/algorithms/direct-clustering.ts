@@ -15,17 +15,24 @@ export async function directClustering(
     model?: string;
     minClusterSize?: number;
     maxClusters?: number;
+    context?: string;
   }
 ): Promise<Cluster[]> {
   const model = options.model || 'gpt-4o-mini-2024-07-18';
   const minClusterSize = options.minClusterSize || 2;
   const maxClusters = options.maxClusters || 10;
+  const context = options.context || '';
   
   // Prepare the prompt
+  const contextIntro = context 
+    ? `I have a list of ${keywords.length} keywords related to "${context}" that I need to cluster into groups based on their semantic similarity.`
+    : `I have a list of ${keywords.length} keywords that I need to cluster into groups based on their semantic similarity.`;
+  
   const prompt = `
-I have a list of ${keywords.length} keywords that I need to cluster into groups based on their semantic similarity.
+${contextIntro}
 Please analyze these keywords and group them into ${Math.min(maxClusters, Math.ceil(keywords.length / minClusterSize))} clusters (or fewer).
 Each cluster should have at least ${minClusterSize} items (if possible).
+${context ? `\nThe keywords are specifically about: ${context}. Please make sure the cluster names and descriptions reflect this context.` : ''}
 
 Keywords:
 ${keywords.map(k => `- ${k}`).join('\n')}

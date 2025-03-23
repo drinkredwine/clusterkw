@@ -32,7 +32,9 @@ const clusterer = new KeywordClusterer({
   embeddingModel: 'text-embedding-3-small',
   completionModel: 'gpt-4o-mini-2024-07-18',
   minClusterSize: 3,
-  distanceThreshold: 0.2
+  distanceThreshold: 0.2,
+  algorithm: 'direct',
+  context: 'AI chat topics'
 });
 
 // Example keywords
@@ -107,6 +109,10 @@ clusterkw --file keywords.txt --algorithm kmeans --clusters 5
 clusterkw --file keywords.txt --algorithm hierarchical --linkage complete
 clusterkw --file keywords.txt --algorithm direct --gpt-model gpt-4o-mini-2024-07-18
 
+# Use context to guide clustering
+clusterkw --file keywords.txt --context "AI chat topics"
+clusterkw --file keywords.txt --algorithm direct --context "Google Ads keywords"
+
 # Provide API key directly (alternatively, set OPENAI_API_KEY or OPENAI_KEY environment variable)
 clusterkw --file keywords.txt --api-key your-openai-api-key
 ```
@@ -127,6 +133,7 @@ clusterkw --file keywords.txt --api-key your-openai-api-key
 | `--clusters` | `-k` | Number of clusters for k-means algorithm | `5` |
 | `--max-iterations` | | Maximum iterations for k-means algorithm | `100` |
 | `--linkage` | | Linkage method for hierarchical clustering | `average` |
+| `--context` | | Context description to guide clustering | (none) |
 | `--delimiter` | | CSV delimiter | `,` |
 | `--no-header` | | CSV file has no header row | (false) |
 

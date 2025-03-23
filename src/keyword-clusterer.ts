@@ -18,6 +18,7 @@ export class KeywordClusterer {
   private k?: number;
   private maxIterations?: number;
   private linkage?: 'single' | 'complete' | 'average';
+  private context?: string;
 
   /**
    * Creates a new KeywordClusterer instance
@@ -40,6 +41,7 @@ export class KeywordClusterer {
     this.k = options.k;
     this.maxIterations = options.maxIterations;
     this.linkage = options.linkage || 'average';
+    this.context = options.context;
   }
 
   /**
@@ -57,7 +59,8 @@ export class KeywordClusterer {
       return await directClustering(keywords, this.openai, {
         model: this.completionModel,
         minClusterSize: this.minClusterSize,
-        maxClusters: this.k || 10
+        maxClusters: this.k || 10,
+        context: this.context
       });
     }
 
@@ -197,6 +200,11 @@ export class KeywordClusterer {
     for (const cluster of clusters) {
       const items = cluster.items.join(', ');
       
+      // Prepare the prompt with context if available
+      const contextPrompt = this.context 
+        ? `I have a cluster of keywords related to "${this.context}": ${items}. Please provide a short, descriptive name for this cluster and a brief description of what unifies these keywords in the context of ${this.context}. Format your response as JSON with "name" and "description" fields.`
+        : `I have a cluster of keywords: ${items}. Please provide a short, descriptive name for this cluster and a brief description of what unifies these keywords. Format your response as JSON with "name" and "description" fields.`;
+      
       const response = await this.openai.chat.completions.create({
         model: this.completionModel,
         messages: [
@@ -206,7 +214,7 @@ export class KeywordClusterer {
           },
           {
             role: 'user',
-            content: `I have a cluster of keywords: ${items}. Please provide a short, descriptive name for this cluster and a brief description of what unifies these keywords. Format your response as JSON with "name" and "description" fields.`
+            content: contextPrompt
           }
         ],
         response_format: { type: 'json_object' }
