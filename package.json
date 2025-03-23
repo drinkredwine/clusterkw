@@ -32,16 +32,16 @@
     "nlp",
     "ai"
   ],
-  "author": "",
+  "author": "drinkredwine",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/clusterkw.git"
+    "url": "git+https://github.com/drinkredwine/clusterkw.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/clusterkw/issues"
+    "url": "https://github.com/drinkredwine/clusterkw/issues"
   },
-  "homepage": "https://github.com/yourusername/clusterkw#readme",
+  "homepage": "https://github.com/drinkredwine/clusterkw#readme",
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",

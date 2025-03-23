@@ -35,7 +35,7 @@ This document explains how to set up automatic publishing of this package to npm
 git init
 
 # Add remote repository
-git remote add origin https://github.com/yourusername/clusterkw.git
+git remote add origin https://github.com/drinkredwine/clusterkw.git
 
 # Add all files
 git add .
