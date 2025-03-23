@@ -26,7 +26,7 @@ program
   .option('-m, --min-cluster-size <number>', 'Minimum cluster size', '2')
   .option('-d, --distance <number>', 'Maximum distance threshold', '0.3')
   .option('-e, --embedding-model <model>', 'OpenAI embedding model', 'text-embedding-3-small')
-  .option('-g, --gpt-model <model>', 'OpenAI completion model', 'gpt-3.5-turbo')
+  .option('-g, --gpt-model <model>', 'OpenAI completion model', 'gpt-4o-mini-2024-07-18')
   .option('-a, --algorithm <algorithm>', 'Clustering algorithm (simple, kmeans, hierarchical)', 'simple')
   .option('--k <number>', 'Number of clusters for k-means algorithm')
   .option('--max-iterations <number>', 'Maximum iterations for k-means algorithm', '100')
@@ -47,10 +47,29 @@ async function main() {
       process.exit(1);
     }
 
-    // Get API key
-    const apiKey = options.key || process.env.OPENAI_API_KEY;
+    // Get API key with enhanced handling
+    let apiKey = options.key || process.env.OPENAI_API_KEY;
+    
+    // If no API key found, check for .env file
     if (!apiKey) {
-      console.error('Error: OpenAI API key is required. Provide it with --key option or set OPENAI_API_KEY environment variable.');
+      try {
+        // Check if .env file exists
+        if (fs.existsSync('.env')) {
+          console.log('Found .env file, loading environment variables...');
+          // Force reload of .env file
+          dotenv.config({ override: true });
+          apiKey = process.env.OPENAI_API_KEY;
+        }
+      } catch (error) {
+        console.warn('Error checking for .env file:', error.message);
+      }
+    }
+    
+    if (!apiKey) {
+      console.error('Error: OpenAI API key is required. You can provide it via:');
+      console.error('  1. --key command line option');
+      console.error('  2. OPENAI_API_KEY environment variable');
+      console.error('  3. .env file with OPENAI_API_KEY=your-key');
       process.exit(1);
     }
 

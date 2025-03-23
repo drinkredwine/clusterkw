@@ -32,7 +32,7 @@ export class KeywordClusterer {
     });
 
     this.embeddingModel = options.embeddingModel || 'text-embedding-3-small';
-    this.completionModel = options.completionModel || 'gpt-3.5-turbo';
+    this.completionModel = options.completionModel || 'gpt-4o-mini-2024-07-18';
     this.minClusterSize = options.minClusterSize || 2;
     this.distanceThreshold = options.distanceThreshold || 0.3;
     this.algorithm = options.algorithm || 'simple';

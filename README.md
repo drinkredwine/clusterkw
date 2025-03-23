@@ -25,7 +25,7 @@ const clusterer = new KeywordClusterer({
   apiKey: 'your-openai-api-key',
   // Optional configuration
   embeddingModel: 'text-embedding-3-small',
-  completionModel: 'gpt-3.5-turbo',
+  completionModel: 'gpt-4o-mini-2024-07-18',
   minClusterSize: 3,
   distanceThreshold: 0.2
 });
@@ -116,7 +116,7 @@ clusterkw --file keywords.txt --key your-openai-api-key
 | `--min-cluster-size` | `-m` | Minimum cluster size | `2` |
 | `--distance` | `-d` | Maximum distance threshold | `0.3` |
 | `--embedding-model` | `-e` | OpenAI embedding model | `text-embedding-3-small` |
-| `--gpt-model` | `-g` | OpenAI completion model | `gpt-3.5-turbo` |
+| `--gpt-model` | `-g` | OpenAI completion model | `gpt-4o-mini-2024-07-18` |
 | `--algorithm` | `-a` | Clustering algorithm (simple, kmeans, hierarchical) | `simple` |
 | `--k` | | Number of clusters for k-means algorithm | (auto) |
 | `--max-iterations` | | Maximum iterations for k-means algorithm | `100` |

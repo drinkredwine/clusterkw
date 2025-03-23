@@ -57,6 +57,7 @@ async function compareAlgorithms(apiKey: string, keywords: string[]) {
     const clusterer = new KeywordClusterer({
       apiKey,
       algorithm: algorithm as any,
+      completionModel: 'gpt-4o-mini-2024-07-18',
       minClusterSize: 2,
       distanceThreshold: 0.3,
       k: algorithm === 'kmeans' ? 4 : undefined,
