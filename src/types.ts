@@ -1,4 +1,14 @@
 /**
+ * Available clustering algorithms
+ */
+export type ClusteringAlgorithm = 'simple' | 'kmeans' | 'hierarchical';
+
+/**
+ * Linkage methods for hierarchical clustering
+ */
+export type HierarchicalLinkage = 'single' | 'complete' | 'average';
+
+/**
  * Configuration options for the KeywordClusterer
  */
 export interface KeywordClustererOptions {
@@ -12,6 +22,14 @@ export interface KeywordClustererOptions {
   minClusterSize?: number;
   /** Maximum cosine distance for items to be considered similar */
   distanceThreshold?: number;
+  /** Clustering algorithm to use */
+  algorithm?: ClusteringAlgorithm;
+  /** Number of clusters for k-means algorithm */
+  k?: number;
+  /** Maximum iterations for k-means algorithm */
+  maxIterations?: number;
+  /** Linkage method for hierarchical clustering */
+  linkage?: HierarchicalLinkage;
 }
 
 /**

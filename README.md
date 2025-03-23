@@ -64,13 +64,17 @@ The main class for clustering keywords.
 - `completionModel` (string, optional): The OpenAI model to use for generating cluster names and descriptions. Default: 'gpt-3.5-turbo'
 - `minClusterSize` (number, optional): Minimum number of items to form a cluster. Default: 2
 - `distanceThreshold` (number, optional): Maximum cosine distance for items to be considered similar. Default: 0.3
+- `algorithm` (string, optional): Clustering algorithm to use ('simple', 'kmeans', or 'hierarchical'). Default: 'simple'
+- `k` (number, optional): Number of clusters for k-means algorithm. Default: auto-calculated based on dataset size
+- `maxIterations` (number, optional): Maximum iterations for k-means algorithm. Default: 100
+- `linkage` (string, optional): Linkage method for hierarchical clustering ('single', 'complete', or 'average'). Default: 'average'
 
 #### Methods
 
 - `clusterKeywords(keywords: string[]): Promise<Cluster[]>`: Clusters the provided keywords and returns the clusters with names and descriptions.
 - `getEmbeddings(texts: string[]): Promise<number[][]>`: Gets embeddings for the provided texts.
 - `calculateDistances(embeddings: number[][]): number[][]`: Calculates the cosine distances between all embeddings.
-- `generateClusters(keywords: string[], distances: number[][]): Cluster[]`: Generates clusters based on the distances.
+- `generateClusters(keywords: string[], distances: number[][], embeddings?: number[][]): Cluster[]`: Generates clusters based on the selected algorithm.
 - `nameAndDescribeClusters(clusters: Cluster[]): Promise<Cluster[]>`: Generates names and descriptions for the clusters.
 
 ## Command Line Interface (CLI)
@@ -93,6 +97,10 @@ clusterkw --file keywords.txt --output clusters.json
 # Customize clustering parameters
 clusterkw --file keywords.txt --min-cluster-size 3 --distance 0.25
 
+# Use different clustering algorithms
+clusterkw --file keywords.txt --algorithm kmeans --k 5
+clusterkw --file keywords.txt --algorithm hierarchical --linkage complete
+
 # Provide API key directly (alternatively, set OPENAI_API_KEY environment variable)
 clusterkw --file keywords.txt --key your-openai-api-key
 ```
@@ -109,6 +117,10 @@ clusterkw --file keywords.txt --key your-openai-api-key
 | `--distance` | `-d` | Maximum distance threshold | `0.3` |
 | `--embedding-model` | `-e` | OpenAI embedding model | `text-embedding-3-small` |
 | `--gpt-model` | `-g` | OpenAI completion model | `gpt-3.5-turbo` |
+| `--algorithm` | `-a` | Clustering algorithm (simple, kmeans, hierarchical) | `simple` |
+| `--k` | | Number of clusters for k-means algorithm | (auto) |
+| `--max-iterations` | | Maximum iterations for k-means algorithm | `100` |
+| `--linkage` | | Linkage method for hierarchical clustering | `average` |
 | `--delimiter` | | CSV delimiter | `,` |
 | `--no-header` | | CSV file has no header row | (false) |
 

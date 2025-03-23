@@ -1,5 +1,8 @@
 import OpenAI from 'openai';
-import { Cluster, KeywordClustererOptions } from './types';
+import { Cluster, ClusteringAlgorithm, KeywordClustererOptions } from './types';
+import { simpleClustering } from './algorithms/simple-clustering';
+import { kmeansClustering } from './algorithms/kmeans-clustering';
+import { hierarchicalClustering } from './algorithms/hierarchical-clustering';
 
 /**
  * KeywordClusterer class for clustering keywords using OpenAI embeddings
@@ -10,6 +13,10 @@ export class KeywordClusterer {
   private completionModel: string;
   private minClusterSize: number;
   private distanceThreshold: number;
+  private algorithm: ClusteringAlgorithm;
+  private k?: number;
+  private maxIterations?: number;
+  private linkage?: 'single' | 'complete' | 'average';
 
   /**
    * Creates a new KeywordClusterer instance
@@ -28,6 +35,10 @@ export class KeywordClusterer {
     this.completionModel = options.completionModel || 'gpt-3.5-turbo';
     this.minClusterSize = options.minClusterSize || 2;
     this.distanceThreshold = options.distanceThreshold || 0.3;
+    this.algorithm = options.algorithm || 'simple';
+    this.k = options.k;
+    this.maxIterations = options.maxIterations;
+    this.linkage = options.linkage || 'average';
   }
 
   /**
@@ -46,8 +57,8 @@ export class KeywordClusterer {
     // Calculate distances between all embeddings
     const distances = this.calculateDistances(embeddings);
 
-    // Generate clusters based on distances
-    const clusters = this.generateClusters(keywords, distances);
+    // Generate clusters based on the selected algorithm
+    const clusters = this.generateClusters(keywords, distances, embeddings);
 
     // Generate names and descriptions for clusters
     const namedClusters = await this.nameAndDescribeClusters(clusters);
@@ -132,49 +143,37 @@ export class KeywordClusterer {
   }
 
   /**
-   * Generates clusters based on distances
+   * Generates clusters based on the selected algorithm
    * @param keywords Array of keywords
    * @param distances Matrix of distances
    * @returns Array of clusters
    */
-  public generateClusters(keywords: string[], distances: number[][]): Cluster[] {
-    const n = keywords.length;
-    const visited = new Set<number>();
-    const clusters: Cluster[] = [];
-
-    for (let i = 0; i < n; i++) {
-      if (visited.has(i)) continue;
-
-      const cluster: string[] = [keywords[i]];
-      visited.add(i);
-
-      for (let j = 0; j < n; j++) {
-        if (i === j || visited.has(j)) continue;
-
-        if (distances[i][j] <= this.distanceThreshold) {
-          cluster.push(keywords[j]);
-          visited.add(j);
+  public generateClusters(keywords: string[], distances: number[][], embeddings?: number[][]): Cluster[] {
+    switch (this.algorithm) {
+      case 'kmeans':
+        if (!embeddings) {
+          throw new Error('Embeddings are required for k-means clustering');
         }
-      }
-
-      if (cluster.length >= this.minClusterSize) {
-        clusters.push({ items: cluster });
-      }
+        return kmeansClustering(keywords, embeddings, {
+          k: this.k,
+          maxIterations: this.maxIterations,
+          minClusterSize: this.minClusterSize
+        });
+      
+      case 'hierarchical':
+        return hierarchicalClustering(keywords, distances, {
+          minClusterSize: this.minClusterSize,
+          distanceThreshold: this.distanceThreshold,
+          linkage: this.linkage
+        });
+      
+      case 'simple':
+      default:
+        return simpleClustering(keywords, distances, {
+          minClusterSize: this.minClusterSize,
+          distanceThreshold: this.distanceThreshold
+        });
     }
-
-    // Handle unclustered items
-    const unclustered: string[] = [];
-    for (let i = 0; i < n; i++) {
-      if (!visited.has(i)) {
-        unclustered.push(keywords[i]);
-      }
-    }
-
-    if (unclustered.length > 0 && unclustered.length >= this.minClusterSize) {
-      clusters.push({ items: unclustered });
-    }
-
-    return clusters;
   }
 
   /**

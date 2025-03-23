@@ -18,6 +18,7 @@
     "example:basic": "ts-node examples/basic-usage.ts",
     "example:chat": "ts-node examples/chat-topics.ts",
     "example:tasks": "ts-node examples/project-tasks.ts",
+    "example:algorithms": "ts-node examples/algorithm-comparison.ts",
     "cli": "ts-node src/cli.ts",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",

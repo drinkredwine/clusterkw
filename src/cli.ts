@@ -27,6 +27,10 @@ program
   .option('-d, --distance <number>', 'Maximum distance threshold', '0.3')
   .option('-e, --embedding-model <model>', 'OpenAI embedding model', 'text-embedding-3-small')
   .option('-g, --gpt-model <model>', 'OpenAI completion model', 'gpt-3.5-turbo')
+  .option('-a, --algorithm <algorithm>', 'Clustering algorithm (simple, kmeans, hierarchical)', 'simple')
+  .option('--k <number>', 'Number of clusters for k-means algorithm')
+  .option('--max-iterations <number>', 'Maximum iterations for k-means algorithm', '100')
+  .option('--linkage <method>', 'Linkage method for hierarchical clustering (single, complete, average)', 'average')
   .option('--delimiter <char>', 'CSV delimiter', ',')
   .option('--no-header', 'CSV file has no header row');
 
@@ -74,8 +78,14 @@ async function main() {
       embeddingModel: options.embeddingModel,
       completionModel: options.gptModel,
       minClusterSize: parseInt(options.minClusterSize, 10),
-      distanceThreshold: parseFloat(options.distance)
+      distanceThreshold: parseFloat(options.distance),
+      algorithm: options.algorithm as any,
+      k: options.k ? parseInt(options.k, 10) : undefined,
+      maxIterations: parseInt(options.maxIterations, 10),
+      linkage: options.linkage as any
     });
+    
+    console.log(`Using clustering algorithm: ${options.algorithm}`);
 
     console.log('Clustering keywords...');
     
