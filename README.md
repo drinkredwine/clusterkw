@@ -98,11 +98,11 @@ clusterkw --file keywords.txt --output clusters.json
 clusterkw --file keywords.txt --min-cluster-size 3 --distance 0.25
 
 # Use different clustering algorithms
-clusterkw --file keywords.txt --algorithm kmeans --k 5
+clusterkw --file keywords.txt --algorithm kmeans --clusters 5
 clusterkw --file keywords.txt --algorithm hierarchical --linkage complete
 
-# Provide API key directly (alternatively, set OPENAI_API_KEY environment variable)
-clusterkw --file keywords.txt --key your-openai-api-key
+# Provide API key directly (alternatively, set OPENAI_API_KEY or OPENAI_KEY environment variable)
+clusterkw --file keywords.txt --api-key your-openai-api-key
 ```
 
 ### CLI Options
@@ -112,13 +112,13 @@ clusterkw --file keywords.txt --key your-openai-api-key
 | `--file` | `-f` | Path to file containing keywords (supports txt, csv, json) | (required) |
 | `--column` | `-c` | Column name containing keywords (for CSV files) | `keyword` |
 | `--output` | `-o` | Output file path (supports json, csv) | (none) |
-| `--key` | `-k` | OpenAI API key (overrides OPENAI_API_KEY env variable) | (from env) |
+| `--api-key` | | OpenAI API key (overrides environment variables) | (from env) |
 | `--min-cluster-size` | `-m` | Minimum cluster size | `2` |
 | `--distance` | `-d` | Maximum distance threshold | `0.3` |
 | `--embedding-model` | `-e` | OpenAI embedding model | `text-embedding-3-small` |
 | `--gpt-model` | `-g` | OpenAI completion model | `gpt-4o-mini-2024-07-18` |
 | `--algorithm` | `-a` | Clustering algorithm (simple, kmeans, hierarchical) | `simple` |
-| `--k` | | Number of clusters for k-means algorithm | (auto) |
+| `--clusters` | `-k` | Number of clusters for k-means algorithm | `5` |
 | `--max-iterations` | | Maximum iterations for k-means algorithm | `100` |
 | `--linkage` | | Linkage method for hierarchical clustering | `average` |
 | `--delimiter` | | CSV delimiter | `,` |

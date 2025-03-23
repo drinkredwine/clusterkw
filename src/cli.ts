@@ -22,13 +22,13 @@ program
   .option('-f, --file <path>', 'Path to file containing keywords (supports txt, csv, json)')
   .option('-c, --column <name>', 'Column name containing keywords (for CSV files)', 'keyword')
   .option('-o, --output <path>', 'Output file path (supports json, csv)')
-  .option('-k, --key <apiKey>', 'OpenAI API key (overrides OPENAI_API_KEY env variable)')
+  .option('--api-key <apiKey>', 'OpenAI API key (overrides OPENAI_API_KEY env variable)')
   .option('-m, --min-cluster-size <number>', 'Minimum cluster size', '2')
   .option('-d, --distance <number>', 'Maximum distance threshold', '0.3')
   .option('-e, --embedding-model <model>', 'OpenAI embedding model', 'text-embedding-3-small')
   .option('-g, --gpt-model <model>', 'OpenAI completion model', 'gpt-4o-mini-2024-07-18')
   .option('-a, --algorithm <algorithm>', 'Clustering algorithm (simple, kmeans, hierarchical)', 'simple')
-  .option('--k <number>', 'Number of clusters for k-means algorithm')
+  .option('-k, --clusters <number>', 'Number of clusters for k-means algorithm', '5')
   .option('--max-iterations <number>', 'Maximum iterations for k-means algorithm', '100')
   .option('--linkage <method>', 'Linkage method for hierarchical clustering (single, complete, average)', 'average')
   .option('--delimiter <char>', 'CSV delimiter', ',')
@@ -47,33 +47,42 @@ async function main() {
       process.exit(1);
     }
 
-    // Get API key with enhanced handling
-    let apiKey = options.key || process.env.OPENAI_API_KEY;
-    
-    // If no API key found, check for .env file
-    if (!apiKey) {
-      try {
-        // Check if .env file exists
-        if (fs.existsSync('.env')) {
-          console.log('Found .env file, loading environment variables...');
-          // Force reload of .env file
-          dotenv.config({ override: true });
-          apiKey = process.env.OPENAI_API_KEY;
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.warn('Error checking for .env file:', error.message);
-        } else {
-          console.warn('Error checking for .env file');
-        }
+    // Load .env file first, regardless of whether we already have an API key
+    try {
+      // Check if .env file exists
+      if (fs.existsSync('.env')) {
+        console.log('Found .env file, loading environment variables...');
+        // Force reload of .env file
+        dotenv.config({ override: true, path: '.env' });
       }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.warn('Error loading .env file:', error.message);
+      } else {
+        console.warn('Error loading .env file');
+      }
+    }
+    
+    // Get API key with enhanced handling - check all possible sources
+    let apiKey = options.apiKey || 
+                 process.env.OPENAI_API_KEY || 
+                 process.env.OPENAI_KEY;
+    
+    // Debug output to help troubleshoot
+    if (!apiKey) {
+      console.log('API key not found. Checking environment variables:');
+      console.log('- OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? 'Found' : 'Not found');
+      console.log('- OPENAI_KEY:', process.env.OPENAI_KEY ? 'Found' : 'Not found');
+      console.log('- --api-key option:', options.apiKey ? 'Provided' : 'Not provided');
+      console.log('- .env file:', fs.existsSync('.env') ? 'Found' : 'Not found');
     }
     
     if (!apiKey) {
       console.error('Error: OpenAI API key is required. You can provide it via:');
-      console.error('  1. --key command line option');
+      console.error('  1. --api-key command line option');
       console.error('  2. OPENAI_API_KEY environment variable');
-      console.error('  3. .env file with OPENAI_API_KEY=your-key');
+      console.error('  3. OPENAI_KEY environment variable');
+      console.error('  4. .env file with OPENAI_API_KEY=your-key or OPENAI_KEY=your-key');
       process.exit(1);
     }
 
@@ -103,7 +112,7 @@ async function main() {
       minClusterSize: parseInt(options.minClusterSize, 10),
       distanceThreshold: parseFloat(options.distance),
       algorithm: options.algorithm as any,
-      k: options.k ? parseInt(options.k, 10) : undefined,
+      k: parseInt(options.clusters, 10),
       maxIterations: parseInt(options.maxIterations, 10),
       linkage: options.linkage as any
     });

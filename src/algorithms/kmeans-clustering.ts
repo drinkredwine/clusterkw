@@ -19,7 +19,7 @@ export function kmeansClustering(
   const n = keywords.length;
   
   // Default options
-  const k = options.k || Math.min(5, Math.ceil(Math.sqrt(n / 2)));
+  const k = options.k || 5; // Default to 5 clusters
   const maxIterations = options.maxIterations || 100;
   const minClusterSize = options.minClusterSize || 2;
   
