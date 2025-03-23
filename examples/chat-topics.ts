@@ -17,7 +17,7 @@ async function main() {
   const clusterer = new KeywordClusterer({
     apiKey,
     embeddingModel: 'text-embedding-3-small',
-    completionModel: 'gpt-3.5-turbo',
+    completionModel: 'gpt-4o-mini-2024-07-18',
     minClusterSize: 2,
     distanceThreshold: 0.25
   });
