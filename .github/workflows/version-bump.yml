@@ -37,12 +37,7 @@ jobs:
           git config user.email "actions@github.com"
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: npm install
 
       - name: Bump version (custom)
         if: ${{ inputs.custom_version != '' }}
